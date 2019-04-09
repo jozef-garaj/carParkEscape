@@ -1,0 +1,203 @@
+function escape(carpark) {
+  ///*
+  carpark = [
+    [1, 0, 0, 0, 2],
+    [0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+  ];
+  //*/
+  var result = [];
+  var pocetPoschodi = carpark.length;
+  var rozdiel = 0;
+  var rozdiel2;
+  var rozdiel3 = 0;
+
+  //  staircase
+  var schody;
+  schody = carpark[carpark.length - 1].indexOf(1);
+
+  if (pocetPoschodi > 1) {
+    var schody2 = -1;
+    schody2 = carpark[carpark.length - 2].indexOf(1);
+  }
+
+  if (pocetPoschodi > 2) {
+    var schody3 = carpark[carpark.length - 3].indexOf(1);
+  }
+
+  if (pocetPoschodi > 3) {
+    var schody4 = carpark[carpark.length - 4].indexOf(1);
+  }
+
+  // car
+  var autoo1 = carpark[carpark.length - 1].indexOf(2);
+
+  if (pocetPoschodi > 1) {
+    var autoo2 = carpark[carpark.length - 2].indexOf(2);
+  }
+
+  if (pocetPoschodi > 2) {
+    var autoo3 = carpark[carpark.length - 3].indexOf(2);
+  }
+
+  if (pocetPoschodi > 3) {
+    var autoo4 = carpark[carpark.length - 4].indexOf(2);
+  }
+  //
+  //exit
+  //
+  var vychod1;
+  vychod1 = carpark[carpark.length - 1].lastIndexOf(0);
+
+  if (pocetPoschodi > 1) {
+    var vychod2 = carpark[carpark.length - 2].lastIndexOf(0);
+  }
+
+  if (pocetPoschodi > 2) {
+    var vychod3 = carpark[carpark.length - 3].lastIndexOf(0);
+  }
+
+  if (pocetPoschodi > 3) {
+    var vychod4 = carpark[carpark.length - 4].lastIndexOf(0);
+  }
+
+  // If there is just 1 floor:
+  if (pocetPoschodi == 1) {
+    console.log(result);
+  }
+  //
+  // If there are 2 floors
+  if (pocetPoschodi == 2) {
+    //2nd floor
+    var rozdiel = autoo2 - schody2;
+    if (rozdiel > 0) {
+      result.push("L" + rozdiel);
+      result.push("D1");
+    } else {
+      var rozdiel = schody2 - autoo2;
+      result.push("R" + rozdiel);
+      result.push("D1");
+    }
+    //ground floor
+    //
+    rozdiel2 = vychod1 - schody2;
+    result.push("R" + rozdiel2);
+
+    console.log(result);
+  }
+
+  //
+  // if there are 3 floors
+  if (pocetPoschodi == 3) {
+    //the uppermost floor
+    var rozdiel = autoo3 - schody3;
+    if (rozdiel > 0) {
+      result.push("L" + rozdiel);
+      result.push("D1");
+    } else {
+      var rozdiel = schody3 - autoo3;
+      result.push("R" + rozdiel);
+      result.push("D1");
+    }
+    //middle floor
+    var rozdiel2 = schody3 - schody2;
+    if (rozdiel2 == 0) {
+      //if there are two D1, then change it into D2
+      result.pop();
+      result.push("D2");
+    } else if (rozdiel2 > 0) {
+      result.push("L" + rozdiel2);
+    } else {
+      result.push("R" - rozdiel2);
+    }
+    // ground floor
+    // rozdiel3 means difference between exit and staircase from the floor above.
+    //if there is a difference, then the car has to go to the right
+    var rozdiel3 = vychod1 - schody2;
+    if (rozdiel3 == 0) {
+      //If there are already 2x D1, then change it into D2. If there is already D2, then change it into D3.
+      if (rozdiel3 == rozdiel2) {
+        result.pop();
+        result.push("D3");
+      } else {
+        result.pop();
+        result.push("D2");
+      }
+    } else {
+      result.push("R" + rozdiel3);
+    }
+    console.log(result);
+  }
+  //
+  //
+  //if there are 4 floors
+  if (pocetPoschodi == 4) {
+    //the uppermost
+    var rozdiel = autoo4 - schody4;
+    if (rozdiel > 0) {
+      result.push("L" + rozdiel);
+      result.push("D1");
+    } else {
+      var rozdiel = schody4 - autoo4;
+      result.push("R" + rozdiel);
+      result.push("D1");
+    }
+
+    // second uppermost floor
+    // rozdiel2 is difference between the staircase of both floors
+    var rozdiel2 = schody4 - schody3;
+
+    if (rozdiel2 == 0) {
+      //if there are 2x D1, then change it into D2
+      result.pop();
+      result.push("D2");
+    } else if (rozdiel2 > 0) {
+      result.push("L" + rozdiel2);
+    } else {
+      result.push("R" + -rozdiel2);
+    }
+
+    // In a row 1 - 4 this is the number 2 from the bottom.
+
+    var rozdiel3 = schody3 - schody2;
+    if (rozdiel3 == 0) {
+      //if D1 or D2, then change it
+      if (rozdiel3 == rozdiel2) {
+        result.pop();
+        result.push("D3");
+      } else {
+        result.pop();
+        result.push("D2");
+      }
+    } else if (rozdiel3 > 0) {
+      result.push("D1");
+      result.push("L" + rozdiel3);
+    } else {
+      result.push("D1");
+      result.push("R" - rozdiel3);
+    }
+
+    //ground floor
+    var rozdiel4 = vychod1 - schody2;
+    if (rozdiel4 == 0) {
+      //
+      if (rozdiel4 == rozdiel3) {
+        result.pop();
+        result.push("D3");
+      } else {
+        result.pop();
+        result.push("D2");
+      }
+    } else {
+      result.push("D1");
+      result.push("R" + rozdiel4);
+    }
+    console.log(result);
+  }
+
+  //end
+  //
+}
+
+escape();
